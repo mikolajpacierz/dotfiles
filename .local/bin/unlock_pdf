@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERBOSE=0
+RECURSIVE=0
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [-v|--verbose] [-r|--recursive]
+
+Options:
+  -r, --recursive  Search for PDFs in subdirectories recursively
+  -v, --verbose    Print extra diagnostic information while processing
+  -h, --help       Show this help
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -v|--verbose)
+            VERBOSE=1
+            shift
+            ;;
+        -r|--recursive)
+            RECURSIVE=1
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --) 
+            shift
+            break
+            ;;
+        -*)
+            printf 'Unknown option: %s\n' "$1" >&2
+            usage
+            exit 2
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+echo -n "Enter PDF password (leave empty if none): "
+read -s PASSWORD
+echo
+
+TMPDIR=$(mktemp -d)
+cleanup() {
+    if [[ $VERBOSE -eq 1 ]]; then
+        printf 'Cleaning up temp dir: %s\n' "$TMPDIR"
+    fi
+    rmdir -- "$TMPDIR" 2>/dev/null || rm -rf -- "$TMPDIR" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+shopt -s nullglob
+
+if [[ $RECURSIVE -eq 1 ]]; then
+    if shopt -s globstar 2>/dev/null; then
+        pdfs=( **/*.pdf )
+    else
+        echo "Error: Recursive option requires Bash 4.0+ (globstar support)." >&2
+        exit 1
+    fi
+else
+    pdfs=( *.pdf )
+fi
+
+if [[ ${#pdfs[@]} -eq 0 ]]; then
+    echo "No PDF files found."
+    exit 0
+fi
+
+if [[ $VERBOSE -eq 1 ]]; then
+    printf 'Found %d PDF file(s) to process.\n' "${#pdfs[@]}"
+fi
+
+for f in "${pdfs[@]}"; do
+    printf '\nProcessing: %s\n' "$f"
+
+    temp_target="$TMPDIR/decrypted_temp.pdf"
+
+    cmd=(qpdf)
+    if [[ -n "${PASSWORD:-}" ]]; then
+        cmd+=(--password="$PASSWORD" --decrypt "$f" "$temp_target")
+        if [[ $VERBOSE -eq 1 ]]; then
+            printf 'Running: qpdf --password="%s" --decrypt "%s" "%s"\n' "*****" "$f" "$temp_target"
+        fi
+    else
+        cmd+=(--decrypt "$f" "$temp_target")
+        if [[ $VERBOSE -eq 1 ]]; then
+            printf 'Running: qpdf --decrypt "%s" "%s"\n' "$f" "$temp_target"
+        fi
+    fi
+
+    if "${cmd[@]}"; then
+        if mv -- "$temp_target" "$f"; then
+            printf 'Unlocked: %s\n' "$f"
+        else
+            printf 'Failed to overwrite original file: %s\n' "$f" >&2
+        fi
+    else
+        printf 'Failed to unlock: %s\n' "$f" >&2
+    fi
+done
+
+if [[ $VERBOSE -eq 1 ]]; then
+    echo
+    echo "All PDFs processed."
+fi

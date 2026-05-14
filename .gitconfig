@@ -1,0 +1,10 @@
+[http]
+	postBuffer = 524288000
+[core]
+    editor = nvim
+	excludesfile = ~/.gitignore_global
+    autocrlf = input
+[pull]
+    rebase = false
+[include]
+    path = ~/.gitconfig.local
