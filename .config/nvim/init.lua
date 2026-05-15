@@ -7,6 +7,12 @@ vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
+ vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    underline = true,
+})
+
 -- catppuccin
 
 vim.pack.add({
@@ -30,7 +36,15 @@ vim.pack.add({
 
 local cmp = require('blink.cmp')
 cmp.build():wait(60000)
-cmp.setup()
+cmp.setup({
+    keymap = {
+        preset = 'default',
+
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<Tab>'] = { 'snippet_forward', 'fallback' },
+        ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+    },
+})
 
 -- lsp 
 
@@ -52,6 +66,8 @@ local servers = {
     'clangd',
     'pyright',
     'intelephense',
+    'texlab',
+    'marksman',
     'lua_ls',
     'bashls',
     'yamlls',
@@ -74,7 +90,7 @@ vim.lsp.config("lua_ls", {
   }
 })
 
-for _, server in ipairs(servers) do 
+for _, server in ipairs(servers) do
     vim.lsp.config(server, {
         capabilities = capabilities
     })
@@ -82,9 +98,18 @@ for _, server in ipairs(servers) do
     vim.lsp.enable(server)
 end
 
+-- latex 
+
+vim.pack.add({
+    { src = 'https://github.com/lervag/vimtex' },
+})
+
+vim.g.vimtex_view_method = 'zathura'
+vim.g.vimtex_compiler_method = 'latexmk'
+
 -- other
 
-vim.pack.add ({ 
+vim.pack.add ({
     { src = 'https://github.com/stevearc/oil.nvim' },
     { src = 'https://github.com/folke/trouble.nvim' },
     { src = 'https://github.com/windwp/nvim-autopairs' },
@@ -92,3 +117,6 @@ vim.pack.add ({
 })
 
 require('oil').setup()
+require('trouble').setup()
+require('nvim-autopairs').setup()
+require('nvim-web-devicons').setup()
