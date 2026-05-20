@@ -20,19 +20,6 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # ==========================================
-# Bitwarden SSH Configuration
-# ==========================================
-
-BW_FLATPAK_SOCK="/home/${USER}/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
-BW_STD_SOCK="/home/${USER}/.bitwarden-ssh-agent.sock"
-
-if [ -S "$BW_FLATPAK_SOCK" ]; then
-    export SSH_AUTH_SOCK="$BW_FLATPAK_SOCK"
-elif [ -S "$BW_STD_SOCK" ]; then
-    export SSH_AUTH_SOCK="$BW_STD_SOCK"
-fi
-
-# ==========================================
 # Interactive Shell Configurations
 # ==========================================
 
