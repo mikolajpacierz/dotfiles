@@ -12,6 +12,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
     git
     docker
+    rust
+    you-should-use
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-bat
