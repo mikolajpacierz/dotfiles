@@ -13,6 +13,7 @@ plugins=(
     git
     docker
     mise
+    npm
     rust
     you-should-use
     zsh-autosuggestions
@@ -33,7 +34,5 @@ alias bat='batcat'
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Tool Initializations (These must stay in .zshrc as they hook into the shell)
-eval "$(pyenv init - zsh)"
 eval "$(zoxide init zsh)"
 
-#eval "$(mise activate zsh)"
