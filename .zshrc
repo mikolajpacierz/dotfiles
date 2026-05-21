@@ -12,6 +12,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
     git
     docker
+    mise
     rust
     you-should-use
     zsh-autosuggestions
@@ -35,5 +36,4 @@ alias bat='batcat'
 eval "$(pyenv init - zsh)"
 eval "$(zoxide init zsh)"
 
-# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+#eval "$(mise activate zsh)"
