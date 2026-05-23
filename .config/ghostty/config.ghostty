@@ -1,2 +1,3 @@
 clipboard-write = allow
 term = xterm-256color
+gtk-single-instance = false

@@ -7,7 +7,7 @@ vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
- vim.diagnostic.config({
+vim.diagnostic.config({
     virtual_text = true,
     signs = true,
     underline = true,
@@ -46,7 +46,7 @@ cmp.setup({
     },
 })
 
--- lsp 
+-- lsp
 
 vim.pack.add({
     { src = 'https://github.com/mason-org/mason.nvim' },
@@ -73,6 +73,7 @@ local servers = {
     'yamlls',
     'dockerls',
     'docker_compose_language_service',
+    'alejandra'
 }
 
 require('mason').setup()
@@ -83,11 +84,11 @@ require('mason-lspconfig').setup({
 })
 
 vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      diagnostics = { globals = { "vim" } }
+    settings = {
+        Lua = {
+            diagnostics = { globals = { "vim" } }
+        }
     }
-  }
 })
 
 for _, server in ipairs(servers) do
@@ -98,7 +99,29 @@ for _, server in ipairs(servers) do
     vim.lsp.enable(server)
 end
 
--- latex 
+-- conform
+vim.pack.add({
+    { src = 'https://github.com/stevearc/conform.nvim' },
+})
+
+require("conform").setup({
+    formatters_by_ft = {
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        markdown = { "prettier" },
+
+        c = { "clang-format" },
+        cpp = { "clang-format" },
+        rust = { "rustfmt" },
+        nix = { "alejandra" },
+    },
+    format_on_save = {
+        timeout_ms = 500,
+        lsp_fallback = true,
+    },
+})
+
+-- latex
 
 vim.pack.add({
     { src = 'https://github.com/lervag/vimtex' },
@@ -109,7 +132,7 @@ vim.g.vimtex_compiler_method = 'latexmk'
 
 -- other
 
-vim.pack.add ({
+vim.pack.add({
     { src = 'https://github.com/stevearc/oil.nvim' },
     { src = 'https://github.com/folke/trouble.nvim' },
     { src = 'https://github.com/windwp/nvim-autopairs' },
