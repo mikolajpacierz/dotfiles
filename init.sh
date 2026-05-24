@@ -54,6 +54,11 @@ if [ ! -d "${ZSH_CUSTOM_DIR}/plugins/you-should-use" ]; then
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "${ZSH_CUSTOM_DIR}/plugins/you-should-use"
 fi
 
+if [ ! -d "${ZSH_CUSTOM_DIR}/plugins/fzf-tab" ]; then
+    echo "Cloning fzf-tab..."
+    git clone https://github.com/Aloxaf/fzf-tab.git "${ZSH_CUSTOM_DIR}/plugins/fzf-tab"
+fi
+
 # SYMLINKS
 
 echo -e "${GREEN}Creating symlinks for dotfiles...${NC}"

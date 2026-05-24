@@ -19,6 +19,7 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-bat
+    fzf-tab
 )
 
 source $ZSH/oh-my-zsh.sh
