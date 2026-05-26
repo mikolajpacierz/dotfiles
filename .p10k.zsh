@@ -191,6 +191,10 @@
   typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=
   # Custom icon.
   # typeset -g POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='⭐'
+  #
+  if [[ -f /sys/firmware/devicetree/base/model ]] && grep -q "Raspberry Pi" /sys/firmware/devicetree/base/model; then
+     typeset -g POWERLEVEL9K_LINUX_DEBIAN_ICON=$'\uF315'
+  fi
 
   ################################[ prompt_char: prompt symbol ]################################
   # Green prompt symbol if the last command succeeded.
