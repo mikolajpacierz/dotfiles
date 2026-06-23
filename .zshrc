@@ -36,4 +36,5 @@ alias bat='batcat'
 
 # Tool Initializations (These must stay in .zshrc as they hook into the shell)
 eval "$(zoxide init zsh)"
-
+export PATH=$HOME/intelFPGA_lite/20.1/quartus/bin:$PATH
+export PATH=$HOME/intelFPGA_lite/20.1:$PATH
